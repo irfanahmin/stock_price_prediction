@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Market Prediction</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { width: 50%; margin: auto; text-align: center; }
+        input[type="text"] { width: 80%; padding: 10px; }
+        button { padding: 10px 20px; margin-top: 10px; }
+        #result { margin-top: 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Stock Market Prediction</h1>
+        <input type="text" id="inputData" placeholder="Enter input data (e.g., values separated by commas)">
+        <button onclick="getPrediction()">Predict</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        async function getPrediction() {
+            // Get input values, convert them to numbers, and form an array
+            const inputData = document.getElementById('inputData').value.split(',').map(Number);
+
+            // Send a POST request to the Flask backend
+            const response = await fetch('http://127.0.0.1:5000/predict', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ input: inputData })
+            });
+
+            // Parse the JSON response and display the prediction
+            const data = await response.json();
+            document.getElementById('result').innerText = `Prediction: ${data.prediction}`;
+        }
+    </script>
+</body>
+</html>
